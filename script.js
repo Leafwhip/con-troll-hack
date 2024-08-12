@@ -9,7 +9,7 @@
 // @grant        none
 // ==/UserScript==
 
-(function() {
+setTimeout(function() {
 
     window.onbeforeunload = () => true;
     let godmode = false;
@@ -20,6 +20,14 @@
     let currentFrame;
     let framestepAmount = 1;
 
+    document.body.insertAdjacentHTML('afterbegin', '<div id="timer"style="position:absolute;bottom:0;left:0;z-index:1000;color:white;font-size:120px;">TIMER</div>')
+
+    // live timer
+    function UpdateLiveTimer() {
+        requestAnimationFrame(UpdateLiveTimer);
+        timer.innerHTML = Math.round(frameCount*1000/60)/1000;
+    }
+    requestAnimationFrame(UpdateLiveTimer);
 
     window.addEventListener('keydown', e => {
         if (e.key == 'g') {
@@ -140,9 +148,10 @@
                 gameStates.push([JSON.stringify(game), frameCount, then, remaining]);
                 currentFrame = gameStates.length - 1;
             }
+            //requestAnimationFrame(LogGameState);
         }
+        //requestAnimationFrame(LogGameState);
         Loop = async function(t) {
-            // garbage game code here
             if (
                 lid = window.requestAnimationFrame(Loop),
                 frames = (elapsed = (now = t) - then) / fpsInterval,
@@ -174,4 +183,4 @@
             game.draw(ctx)
         };
     })
-})();
+});
